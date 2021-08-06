@@ -1,0 +1,210 @@
+swagger: '2.0'
+info:
+  description: LG U+ 데모 API
+  version: 0.0.1
+  title: boxoffice
+host: apis.felixcho.com
+basePath: /
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /movie/boxoffice:
+    get:
+      tags:
+        - boxoffice
+      summary: |
+        주간 박스오피스 영화 목록
+      description: |
+        주간 박스 오피스 영화 목록을 추출한다. 호출 설정에 따라 상세 내역의 포함 여부가 결정된다.
+      operationId: getBoxoffice
+      produces:
+        - application/json
+      parameters:
+        - name: isDetailRequired
+          in: query
+          description: |
+            상세 데이타를 포함하는지 여부 (y:포함, n:미포함)
+            - 기본값 = n
+          default: 'n'
+          required: false
+          type: string
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/boxoffice'
+definitions:
+  boxoffice:
+    type: object
+    description: 박스오피스 결과 응답
+    properties:
+      count:
+        description: 결과 목록 갯수
+        type: string
+        example: '10'
+      list:
+        description: 결과 목록
+        type: array
+        items:
+          $ref: '#/definitions/movie'
+  movie:
+    type: object
+    description: 영화
+    properties:
+      rank:
+        description: 순위
+        type: integer
+        example: 1
+      rankInten:
+        description: 순위 변동
+        type: integer
+        example: -1
+      rankOldAndNew:
+        description: 신규 진입 or 기존
+        type: string
+        example: 'NEW'
+      movieCd:
+        description: 영화 코드 (고유번호)
+        type: string
+        example: '20191951'
+      movieNm:
+        description: 영화 제목 (한글)
+        type: string
+        example: '블랙 위도우'
+      movieNmEn:
+        description: 영화 제목 (영어)
+        type: string
+        example: 'Black Widow'
+      movieNmOg:
+        description: 영화 제목 (원제목)
+        type: string
+        example: ''
+      openDt:
+        description: 개봉일
+        type: string
+        example: '2021-07-07'
+      nations:
+        description: 제작 국가, isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/country'
+      genres:
+        description: 장르 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/genre'
+      actors:
+        description: 출연자 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/actor'
+      directors:
+        description: 감독 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/director'
+      staffs:
+        description: 스텝 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/staff'
+      showTypes:
+        description: 상영 포맷 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/showType'
+      audits:
+        description: 심의정보 isDetailRequired=y 일때 포함된다.
+        type: array
+        items: 
+          $ref: '#/definitions/audit'
+  country:
+    type: object
+    description: 제작 국가
+    properties:
+      nationNm:
+        description: 국가명
+        type: string
+        example: '한국'
+  genre:
+    type: object
+    description: 장르
+    properties:
+      genreNm:
+        description: 장르 이름
+        type: string
+        example: '스릴러'
+  actor:
+    type: object
+    description: 배우
+    properties:
+      peopleNm:
+        description: 한글 이름
+        type: string
+        example: '스칼렛 요한슨'
+      peopleNmEn:
+        description: 원어 이름
+        type: string
+        example: 'Scarlett Johansson'
+      cast:
+        description: 배역 한글 이름
+        type: string
+        example: '블랙 위도우'
+      castEn:
+        description: 배역 원어 이름
+        type: string
+        example: 'black widow'
+  director:
+    type: object
+    description: 감독
+    properties:
+      peopleNm:
+        description: 한글 이름
+        type: string
+        example: '케이트 쇼트랜드'
+      peopleNmEn:
+        description: 원어 이름
+        type: string
+        example: 'Cate Shortland'
+  showType:
+    type: object
+    description: 상영 포멧
+    properties:
+      showTypeGroupNm:
+        description: 상영 포멧 그룹 이름
+        type: string
+        example: '2D'
+      showTypeNm:
+        description: 상영 포멧 이름
+        type: string
+        example: '디지털'
+  audit:
+    type: object
+    description: 심의 정보
+    properties:
+      auditNo:
+        description: 심의 번호
+        type: string
+        example: '2021-MF01558'
+      watchGradeNm:
+        description: 심의 등급
+        type: string
+        example: '12세이상관람가'
+  staff:
+    type: object
+    description: 스탭 정보
+    properties:
+      peopleNm:
+        description: 한글 이름
+        type: string
+        example: '장윤정'
+      peopleNmEn:
+        description: 원어 이름
+        type: string
+        example: ''
+      staffRoleNm:
+        description: 담당 업무
+        type: string
+        example: '배급진행'
